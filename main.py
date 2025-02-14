@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_restful import Api, Resource, abort, reqparse, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 
@@ -77,6 +77,16 @@ class Video(Resource):
         if not result:
             abort(404, message = "could not find video with given id")
         return result
+
+class VideoList(Resource):
+    @marshal_with(resource_fields)
+    def get(self):
+        videos = VideoModel.query.all()
+        if not videos:
+            abort(404, message = "could not find any records")
+        else:
+            return videos
+            # return jsonify([video.json() for video in videos])
     
     @marshal_with(resource_fields)
     def put(self,video_id):
@@ -119,6 +129,7 @@ class Video(Resource):
 # api.add_resource(HelloWorld,"/helloworld/<string:name>")
 # api.add_resource(Video,"/videos/<string:video_id>")
 api.add_resource(Video,"/videos/<int:video_id>")
+api.add_resource(VideoList, '/videos/getAll') 
 
 
 if __name__ == "__main__":

@@ -23,5 +23,8 @@ id = input("Enter Id: ")
 response = requests.get(Base+"videos/"+id)
 print(response.json())
 
+response = requests.get(Base+"/videos/getAll")
+print(response.json())
+
 response = requests.patch(Base+"videos/6",{"views":493})
 print(response.json())
